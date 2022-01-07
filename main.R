@@ -30,38 +30,38 @@ library(tree)
 ? rpart()
 
 # Selection d'attribut par Coefficient de Gini et effectif minimal d'un noeud de 10
-tree_rp1 <- rpart(default~., produit_EA, parms = list(split = "gini"), control = rpart.control(minbucket = 10))
-plot(tree_rp1)
-text(tree_rp1, pretty = 0)
+tree_rpart_Gini10 <- rpart(default~., produit_EA, parms = list(split = "gini"), control = rpart.control(minbucket = 10))
+plot(tree_rpart_Gini10)
+text(tree_rpart_Gini10, pretty = 0)
 
 # Selection d'attribut par Coefficient de Gini et effectif minimal d'un noeud de 5
-tree_rp2 <- rpart(default~., produit_EA, parms = list(split = "gini"), control = rpart.control(minbucket = 5))
-plot(tree_rp2)
-text(tree_rp2, pretty = 0)
+tree_rpart_Gini5 <- rpart(default~., produit_EA, parms = list(split = "gini"), control = rpart.control(minbucket = 5))
+plot(tree_rpart_Gini5)
+text(tree_rpart_Gini5, pretty = 0)
 
 # Selection d'attribut par Information Gain et effectif minimal d'un noeud de 10
-tree_rp3 <- rpart(default~., produit_EA, parms = list(split = "information"), control = rpart.control(minbucket = 10))
-plot(tree_rp3)
-text(tree_rp3, pretty = 0)
+tree_rpart_Gain10 <- rpart(default~., produit_EA, parms = list(split = "information"), control = rpart.control(minbucket = 10))
+plot(tree_rpart_Gain10)
+text(tree_rpart_Gain10, pretty = 0)
 
 # Selection d'attribut par Information Gain et effectif minimal d'un noeud de 5
-tree_rp4 <- rpart(default~., produit_EA, parms = list(split = "information"), control = rpart.control(minbucket = 5))
-plot(tree_rp4)
-text(tree_rp4, pretty = 0)
+tree_rpart_Gain5 <- rpart(default~., produit_EA, parms = list(split = "information"), control = rpart.control(minbucket = 5))
+plot(tree_rpart_Gain5)
+text(tree_rpart_Gain5, pretty = 0)
 
 #----------------------------------------------------------------#
 # TEST DES DES CLASSIFIEURS rpart() ET CALCUL DES TAUX DE SUCCES #
 #----------------------------------------------------------------#
 
-# Application de tree_rp1 (identique a tree_rp3) a l'ensemble de test
-test_rp1 <- predict(tree_rp1, produit_ET, type="class")
+# Application de tree_rpart_Gini10 a l'ensemble de test
+test_rpart_Gini10 <- predict(tree_rpart_Gini10, produit_ET, type="class")
 # Calcul du taux de succes : nombre de succes sur nombre total d'exemples de test
-print(taux_rp1 <- nrow(produit_ET[produit_ET$default==test_rp1,])/nrow(produit_ET))
+print(taux_rpart_Gini10 <- nrow(produit_ET[produit_ET$default==test_rpart_Gini10,])/nrow(produit_ET))
 
-# Application de tree2 (identique a tree_rp4) a l'ensemble de test
-test_rp2 <- predict(tree_rp2, produit_ET, type="class")
+# Application de tree_rpart_Gain10 (identique a tree_rpart_Gain5, tree_rpart_Gini5) a l'ensemble de test
+test_rpart_Gain10 <- predict(tree_rpart_Gain10, produit_ET, type="class")
 # Calcul du taux de succes : nombre de succes sur nombre total d'exemples de test
-print(taux_rp2 <- nrow(produit_ET[produit_ET$default==test_rp2,])/nrow(produit_ET))
+print(taux_rpart_Gain10 <- nrow(produit_ET[produit_ET$default==test_rpart_Gain10,])/nrow(produit_ET))
 
 #--------------------------------------------------------------------#
 # APPRENTISSAGE DES CLASSIFIEURS C5.0() AVEC DIFFERENTS PARAMETRAGES #
@@ -71,40 +71,40 @@ print(taux_rp2 <- nrow(produit_ET[produit_ET$default==test_rp2,])/nrow(produit_E
 ? C5.0()
 
 # Apprentissage 1er paramétrage pour C5.0
-tree_C51 <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 10, noGlobalPruning = T))
-plot(tree_C51, type="simple")
+tree_C50_10T <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 10, noGlobalPruning = T))
+plot(tree_C50_10T, type="simple")
 
 # Apprentissage 2nd paramétrage pour C5.0
-tree_C52 <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 10, noGlobalPruning = F))
-plot(tree_C52, type="simple")
+tree_C50_10F <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 10, noGlobalPruning = F))
+plot(tree_C50_10F, type="simple")
 
 # Apprentissage 3eme paramétrage pour C5.0
-tree_C53 <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 5, noGlobalPruning = T))
-plot(tree_C53, type="simple")
+tree_C50_5T <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 5, noGlobalPruning = T))
+plot(tree_C50_5T, type="simple")
 
 # Apprentissage 4eme paramétrage pour C5.0
-tree_C54 <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 5, noGlobalPruning = F))
-plot(tree_C54, type="simple")
+tree_C50_5F <- C5.0(default~., produit_EA, control = C5.0Control(minCases = 5, noGlobalPruning = F))
+plot(tree_C50_5F, type="simple")
 
 #----------------------------------------------------------------#
 # TEST DES DES CLASSIFIEURS C5.0() ET CALCUL DES TAUX DE SUCCES #
 #----------------------------------------------------------------#
 
 # Test et taux de succes pour le 1er paramétrage pour C5.0()
-test_C51 <- predict(tree_C51, produit_ET, type="class")
-print(taux_C51 <- nrow(produit_ET[produit_ET$default==test_C51,])/nrow(produit_ET))
+test_C50_10T <- predict(tree_C50_10T, produit_ET, type="class")
+print(taux_C50_10T <- nrow(produit_ET[produit_ET$default==test_C50_10T,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 2nd paramétrage pour C5.0()
-test_C52 <- predict(tree_C52, produit_ET, type="class")
-print(taux_C52 <- nrow(produit_ET[produit_ET$default==test_C52,])/nrow(produit_ET))
+test_C50_10F <- predict(tree_C50_10F, produit_ET, type="class")
+print(taux_C50_10F <- nrow(produit_ET[produit_ET$default==test_C50_10F,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 3eme paramétrage pour C5.0()
-test_C53 <- predict(tree_C53, produit_ET, type="class")
-print(taux_C53 <- nrow(produit_ET[produit_ET$default==test_C53,])/nrow(produit_ET))
+test_C50_5T <- predict(tree_C50_5T, produit_ET, type="class")
+print(taux_C50_5T <- nrow(produit_ET[produit_ET$default==test_C50_5T,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 4eme paramétrage pour C5.0()
-test_C54 <- predict(tree_C54, produit_ET, type="class")
-print(taux_C54 <- nrow(produit_ET[produit_ET$default==test_C54,])/nrow(produit_ET))
+test_C50_5F <- predict(tree_C50_5F, produit_ET, type="class")
+print(taux_C50_5F <- nrow(produit_ET[produit_ET$default==test_C50_5F,])/nrow(produit_ET))
 
 
 #--------------------------------------------------------------------#
@@ -115,42 +115,48 @@ print(taux_C54 <- nrow(produit_ET[produit_ET$default==test_C54,])/nrow(produit_E
 ? tree()
 
 # Apprentissage 1er paramétrage pour tree()
-tree_tr1 <- tree(default~., produit_EA, split = "deviance", control = tree.control(nrow(produit_EA), mincut = 10))
-plot(tree_tr1)
-text(tree_tr1, pretty = 0)
+tree_tr_dev10 <- tree(default~., produit_EA, split = "deviance", control = tree.control(nrow(produit_EA), mincut = 10))
+plot(tree_tr_dev10)
+text(tree_tr_dev10, pretty = 0)
 
 # Apprentissage 2nd paramétrage pour tree()
-tree_tr2 <- tree(default~., produit_EA, split = "deviance", control = tree.control(nrow(produit_EA), mincut = 5))
-plot(tree_tr2)
-text(tree_tr2, pretty = 0)
+tree_tr_dev5 <- tree(default~., produit_EA, split = "deviance", control = tree.control(nrow(produit_EA), mincut = 5))
+plot(tree_tr_dev5)
+text(tree_tr_dev5, pretty = 0)
 
 # Apprentissage 3eme paramétrage pour tree()
-tree_tr3 <- tree(default~., produit_EA, split = "gini", control = tree.control(nrow(produit_EA), mincut = 10))
-plot(tree_tr3)
-text(tree_tr3, pretty = 0)
+tree_tr_gini10 <- tree(default~., produit_EA, split = "gini", control = tree.control(nrow(produit_EA), mincut = 10))
+plot(tree_tr_gini10)
+text(tree_tr_gini10, pretty = 0)
 
 # Apprentissage 4eme paramétrage pour tree()
-tree_tr4 <- tree(default~., produit_EA, split = "gini", control = tree.control(nrow(produit_EA), mincut = 5))
-plot(tree_tr4)
-text(tree_tr4, pretty = 0)
+tree_tr_gini5 <- tree(default~., produit_EA, split = "gini", control = tree.control(nrow(produit_EA), mincut = 5))
+plot(tree_tr_gini5)
+text(tree_tr_gini5, pretty = 0)
 
 #----------------------------------------------------------------#
 # TEST DES DES CLASSIFIEURS tree() ET CALCUL DES TAUX DE SUCCES #
 #----------------------------------------------------------------#
 
 # Test et taux de succes pour le 1er paramétrage pour tree()
-test_tr1 <- predict(tree_tr1, produit_ET, type="class")
-print(taux_tr1 <- nrow(produit_ET[produit_ET$default==test_tr1,])/nrow(produit_ET))
+test_tr_dev10 <- predict(tree_tr_dev10, produit_ET, type="class")
+print(taux_tr_dev10 <- nrow(produit_ET[produit_ET$default==test_tr_dev10,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 2nd paramétrage pour tree()
-test_tr2 <- predict(tree_tr2, produit_ET, type="class")
-print(taux_tr2 <- nrow(produit_ET[produit_ET$default==test_tr2,])/nrow(produit_ET))
+test_tr_dev5 <- predict(tree_tr_dev5, produit_ET, type="class")
+print(taux_tr_dev5 <- nrow(produit_ET[produit_ET$default==test_tr_dev5,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 3eme paramétrage pour tree()
-test_tr3 <- predict(tree_tr3, produit_ET, type="class")
-print(taux_tr3 <- nrow(produit_ET[produit_ET$default==test_tr3,])/nrow(produit_ET))
+test_tr_gini10 <- predict(tree_tr_gini10, produit_ET, type="class")
+print(taux_tr_gini10 <- nrow(produit_ET[produit_ET$default==test_tr_gini10,])/nrow(produit_ET))
 
 # Test et taux de succes pour le 4eme paramétrage pour tree()
-test_tr4 <- predict(tree_tr4, produit_ET, type="class")
-print(taux_tr4 <- nrow(produit_ET[produit_ET$default==test_tr4,])/nrow(produit_ET))
+test_tr_gini5 <- predict(tree_tr_gini5, produit_ET, type="class")
+print(taux_tr_gini5 <- nrow(produit_ET[produit_ET$default==test_tr_gini5,])/nrow(produit_ET))
+
+#################################################################################################
+#################################################################################################
+#################################################################################################
+#################################################################################################
+
 
